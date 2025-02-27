@@ -15,6 +15,7 @@ These .do files require Stata 18 or higher.
 To use these .do files you:
 
 1. fork this repository
-2. Obtain the raw data file dummy_v0-1-0.dta  from  https://github.com/maartenteaches/open_science/ and save those in the directory `data`
-3. In ana/dummy_main.do change line 9 (`cd ...`) to where your directory is
-4. run main.do 
+2. Create a directory called `data` directly inside the main `dummy` directory.
+3. Obtain the raw data file dummy_v0-1-0.dta  from  https://github.com/maartenteaches/open_science/ and save that in the directory `data`
+4. In ana/dummy_main.do change line 9 (`cd ...`) to where the main `dummy` directory is
+5. run main.do 
