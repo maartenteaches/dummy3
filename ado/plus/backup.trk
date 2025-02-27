@@ -1,0 +1,177 @@
+* 00000005
+*! version 1.0.0
+* Do not erase or edit this file
+* It is used by Stata to track the ado and help
+* files you have installed.
+
+S http://fmwww.bc.edu/repec/bocode/m
+N mkproject.pkg
+D 19 Feb 2025
+U 1
+d 'MKPROJECT': module to create a project folder with some boilerplate code and research log
+d 
+d  mkproject creates a new folder for a data analysis project with
+d a structure that is inspired by the book "The Workflow of Data
+d Analysis Using Stata" by J. Scott Long. It contains some .do
+d files with some boilerplate code, and the beginning of a research
+d log.
+d 
+d KW: project management
+d KW: work-flow
+d KW: directory
+d KW: folder
+d KW: boilerplate
+d 
+d Requires: Stata version 15
+d 
+d Distribution-Date: 20250204
+d 
+d Author: Maarten L. Buis, University of Konstanz
+d Support: email maarten.buis@@uni-konstanz.de
+d 
+f m\mkproject.ado
+f m\mkproject.sthlp
+f b\boilerplate.ado
+f b\boilerplate.sthlp
+f b\boilerplate_create.sthlp
+f l\lmkproject.mlib
+f m\mkproject_create.sthlp
+f m\mkproject_work.ado
+f m\mp_ana.mpb
+f m\mp_b_ana.sthlp
+f m\mp_b_dta.sthlp
+f m\mp_b_dta_c.sthlp
+f m\mp_b_excer.sthlp
+f m\mp_b_ignore.sthlp
+f m\mp_b_main.sthlp
+f m\mp_b_readme.sthlp
+f m\mp_b_readme_sp.sthlp
+f m\mp_b_rlog.sthlp
+f m\mp_b_rlogc.sthlp
+f m\mp_b_smclpres.sthlp
+f m\mp_course.mpp
+f m\mp_defaults.mpd
+f m\mp_dta.mpb
+f m\mp_dta_c.mpb
+f m\mp_excer.mpb
+f m\mp_excer.mpp
+f m\mp_ignore.mpb
+f m\mp_long.mpp
+f m\mp_longt.mpp
+f m\mp_main.mpb
+f m\mp_p_course.sthlp
+f m\mp_p_excer.sthlp
+f m\mp_p_long.sthlp
+f m\mp_p_longt.sthlp
+f m\mp_p_research_git.sthlp
+f m\mp_p_researcht_git.sthlp
+f m\mp_p_smclpres.sthlp
+f m\mp_readme.mpb
+f m\mp_readme_sp.mpb
+f m\mp_research_git.mpp
+f m\mp_researcht_git.mpp
+f m\mp_rlog.mpb
+f m\mp_rlogc.mpb
+f m\mp_smclpres.mpb
+f m\mp_smclpres.mpp
+f m\mp_b_dta_g.sthlp
+f m\mp_dta_g.mpb
+f m\mp_main_g.mpb
+f m\mp_b_main_g.sthlp
+e
+S http://fmwww.bc.edu/repec/bocode/d
+N dirtree.pkg
+D 19 Feb 2025
+U 2
+d 'DIRTREE': module to display the content of a directory as a tree
+d 
+d  dirtree shows inside Stata the content of a directory, including
+d sub-directories, as a tree. By default, files that can be opened
+d in Stata are shown as clickable links.
+d 
+d KW: directory
+d KW: folder
+d KW: files
+d KW: tree
+d 
+d Requires: Stata version 14
+d 
+d Distribution-Date: 20250203
+d 
+d Author: Maarten L. Buis, University of Konstanz
+d Support: email maarten.buis@@uni-konstanz.de
+d 
+f d\dirtree.ado
+f d\dirtree.sthlp
+e
+S http://fmwww.bc.edu/repec/bocode/f
+N fre.pkg
+D 25 Feb 2025
+U 3
+d 'FRE': module to display one-way frequency table
+d 
+d   fre displays, for each specified variable, a univariate
+d frequency table containing counts, percent, and cumulative
+d percent. Variables may be string or numeric. Labels, in full
+d length, and values are printed. By default, fre only tabulates
+d the smallest and largest 10 values (along with all missing
+d values), but this can be changed. Furthermore,  values with zero
+d observed frequency may be included in the  tables. The default
+d for fre is to display the frequency  tables in the results
+d window. Alternatively, the tables may be written to a file on
+d disk, either tab-delimited or  LaTeX-formatted.
+d 
+d KW: data management
+d KW: frequencies
+d KW: frequency table
+d KW: tabulation
+d 
+d Requires: Stata version 9.2
+d 
+d Distribution-Date: 20210531
+d 
+d Author: Ben Jann, University of Bern
+d Support: email jann@@soz.unibe.ch
+d 
+f f\fre.ado
+f f\fre.hlp
+e
+S http://www.stata-journal.com/software/sj8-2
+N gr0034.pkg
+D 25 Feb 2025
+U 4
+d SJ8-2 gr0034.  Assign values to variables
+d Assign values to variables
+d by Nicholas J. Cox, Durham University, Durham City, UK
+d Support:  n.j.cox@@durham.ac.uk
+d After installation, type help ^labmask^ and ^seqvar^
+f l\labmask.ado
+f l\labmask.hlp
+f s\seqvar.ado
+f s\seqvar.hlp
+e
+S http://fmwww.bc.edu/repec/bocode/d
+N dirtree.pkg
+D 25 Feb 2025
+U 5
+d 'DIRTREE': module to display the content of a directory as a tree
+d 
+d  dirtree shows inside Stata the content of a directory, including
+d sub-directories, as a tree. By default, files that can be opened
+d in Stata are shown as clickable links.
+d 
+d KW: directory
+d KW: folder
+d KW: files
+d KW: tree
+d 
+d Requires: Stata version 14
+d 
+d Distribution-Date: 20250221
+d 
+d Author: Maarten L. Buis, University of Konstanz
+d Support: email maarten.buis@@uni-konstanz.de
+d 
+f d\dirtree.ado
+f d\dirtree.sthlp
+e

@@ -1,0 +1,93 @@
+----------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  c:\mijn documenten\onderwijs\konstanz\stata\open_science\dummy\ana\dummy_ana02.txt
+  log type:  text
+ opened on:  26 Feb 2025, 17:47:08
+
+. 
+. // Multivariate analysis
+. // MM
+. 
+. version 18
+
+. clear all
+
+. macro drop _all
+
+. 
+. use dummy03.dta
+(analysis)
+
+. datasignature confirm, strict
+  (data unchanged since 26feb2025 17:47)
+
+. codebook, compact
+
+Variable    Obs Unique      Mean  Min   Max  Label
+----------------------------------------------------------------------------------------------------
+id         8864   8864    4432.5    1  8864  respondent's identification number
+mobile     7567      2  .6541562    0     1  educationally mobile
+pineapple  8533      2  .4334935    0     1  Is pineapple on pizza acceptable
+books      8827      5  3.068087    1     5  read books in spare time
+agecat     8827      4   40.4271    0    75  age (categorized)
+female     8817      2  .5090167    0     1  respondent's sex
+touse      8864      2  .8295352    0     1  observations without missing values
+----------------------------------------------------------------------------------------------------
+
+. 
+. // do your analysis
+. logit pineapple i.mobile i.agecat i.female i.books, or
+
+Iteration 0:  Log likelihood = -5041.8617  
+Iteration 1:  Log likelihood = -4867.9351  
+Iteration 2:  Log likelihood = -4867.7154  
+Iteration 3:  Log likelihood = -4867.7154  
+
+Logistic regression                                     Number of obs =  7,353
+                                                        LR chi2(9)    = 348.29
+                                                        Prob > chi2   = 0.0000
+Log likelihood = -4867.7154                             Pseudo R2     = 0.0345
+
+-------------------------------------------------------------------------------
+    pineapple | Odds ratio   Std. err.      z    P>|z|     [95% conf. interval]
+--------------+----------------------------------------------------------------
+       mobile |
+         yes  |   .4869127    .024569   -14.26   0.000     .4410629    .5375288
+              |
+       agecat |
+       25-49  |   .7348001   .0736543    -3.07   0.002     .6037361    .8943165
+       50-74  |   .5517442   .0547387    -5.99   0.000     .4542446    .6701712
+         >75  |   .8966482   .1057641    -0.92   0.355     .7115716    1.129862
+              |
+       female |
+      female  |   .7484648   .0370644    -5.85   0.000     .6792339     .824752
+              |
+        books |
+ once a week  |   1.011047   .0773969     0.14   0.886     .8701838    1.174714
+once a month  |    .766669   .0644267    -3.16   0.002     .6502457    .9039372
+  less often  |   .6989496   .0491402    -5.09   0.000     .6089778     .802214
+       never  |   .6896695   .0551711    -4.64   0.000     .5895871    .8067409
+              |
+        _cons |   2.609027   .3079988     8.12   0.000     2.070109    3.288243
+-------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+
+. 
+. coefplot, eform drop(_cons) xline(1) baselevels   ///
+>      headings(0.mobile = "{bf:mobile}"            ///
+>                   0.agecat = "{bf:age (categorized)}" ///
+>                           0.female = "{bf:respondent's sex}"  ///
+>                           1.books  = "{bf:Read books}")       ///
+>          xtitle("{bf:Odds Ratio}")                    ///
+>          mcolor("0 154 209") ciopts(lcolor("0 154 209"))
+
+. graph export ../txt/gr02.emf, replace
+file c:\mijn documenten\onderwijs\konstanz\stata\open_science\dummy\ana\../txt/gr02.emf saved as
+    Enhanced Metafile format
+
+. log close
+      name:  <unnamed>
+       log:  c:\mijn documenten\onderwijs\konstanz\stata\open_science\dummy\ana\dummy_ana02.txt
+  log type:  text
+ closed on:  26 Feb 2025, 17:47:12
+----------------------------------------------------------------------------------------------------

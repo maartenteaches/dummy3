@@ -1,0 +1,241 @@
+----------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  c:\mijn documenten\onderwijs\konstanz\stata\open_science\dummy\ana\dummy_dta01.txt
+  log type:  text
+ opened on:  26 Feb 2025, 17:47:05
+
+. 
+. // prepare education variables
+. // MM
+. 
+. **# Open data and select variables
+. version 18
+
+. clear all
+
+. macro drop _all
+
+. 
+. use ../data/dummy_v0-1-0
+(Dietry Unconventional Meals and Misguided Yummies (Dummy))
+
+. 
+. rename *, lower
+
+. keep id v03-v19
+
+. 
+. **# missing values
+. do dummy_missing.do
+
+. // prepare missing values
+. 
+. mvdecode *, mv(-99=.d \ -98=.e \ -97=.f \ -96=.n \ -95=.l \ -94=.m) 
+         v03: 190 missing values generated
+         v04: 135 missing values generated
+         v05: 135 missing values generated
+         v06: 135 missing values generated
+         v07: 135 missing values generated
+         v08: 135 missing values generated
+         v09: 135 missing values generated
+         v10: 135 missing values generated
+         v11: 135 missing values generated
+         v12: 135 missing values generated
+         v13: 135 missing values generated
+         v14: 135 missing values generated
+         v15: 135 missing values generated
+         v16: 1180 missing values generated
+         v17: 1378 missing values generated
+         v18: 958 missing values generated
+         v19: 1396 missing values generated
+
+. foreach lab in sex educ yesno_lb pvoc health_lb book_lb {
+  2.         label define `lab' .d "don't know" ///
+>                                        .e "refused" ///
+>                                        .f "filter"  ///
+>                                        .n "data error" ///
+>                                        .l "illegible" ///
+>                                        .m "multiple answers", modify
+  3. }
+
+. 
+end of do-file
+
+. 
+. **# respondent's education
+. gen byte school = 1 if inlist(v03,1,2)
+(7,105 missing values generated)
+
+. replace  school = 2 if inlist(v03,3,6)
+(2,628 real changes made)
+
+. replace  school = 3 if inlist(v03,4,5) | v11 == 1
+(4,692 real changes made)
+
+. 
+. gen byte voc = 1 if inlist(1, v04, v05, v08, v14, v15)
+(7,312 missing values generated)
+
+. replace  voc = 2 if inlist(1, v06, v07, v09, v10, v11)
+(5,390 real changes made)
+
+. replace  voc = 3 if inlist(1, v12, v13)
+(2,831 real changes made)
+
+. 
+. gen byte ed:ed_lb = 1 if inlist(school,1,2) & voc == 1
+(8,148 missing values generated)
+
+. replace  ed       = 2 if school == 1 & voc == 2
+(1,172 real changes made)
+
+. replace  ed       = 3 if school == 2 & voc == 2
+(1,897 real changes made)
+
+. replace  ed       = 4 if school == 3 & voc <  3
+(2,045 real changes made)
+
+. replace  ed       = 5 if voc == 3
+(2,831 real changes made)
+
+. label define ed_lb 1 "lower or middle secondary & no vocational"     ///
+>                    2 "lower secondary & vocational"                  ///
+>                    3 "middle secondary & vocational"                 ///
+>                    4 "higher secondary & with or without vocational" ///
+>                    5 "university"
+
+. label var ed "respondent's education"
+
+. note ed: based on v03-v15 \ dummy_dta01.do \ MM TS
+
+. drop school voc
+
+. 
+. **# parents' education
+. // father
+. gen byte fschool = 1 if inlist(v16,1,2)
+(4,761 missing values generated)
+
+. replace  fschool = 2 if inlist(v16,3,6)
+(1,637 real changes made)
+
+. replace  fschool = 3 if inlist(v16,4,5) | v17 == 9
+(2,849 real changes made)
+
+. 
+. gen byte fvoc = 1 if inlist(v17, 1,50)
+(7,629 missing values generated)
+
+. replace  fvoc = 2 if inlist(v17, 5,6,9)
+(4,676 real changes made)
+
+. replace  fvoc = 3 if inlist(v17, 10,11)
+(1,575 real changes made)
+
+. 
+. gen byte fed:ed_lb = 1 if inlist(fschool,1,2) & fvoc == 1
+(7,870 missing values generated)
+
+. replace  fed       = 2 if fschool == 1 & fvoc == 2
+(2,346 real changes made)
+
+. replace  fed       = 3 if fschool == 2 & fvoc == 2
+(907 real changes made)
+
+. replace  fed       = 4 if fschool == 3 & fvoc <  3
+(1,379 real changes made)
+
+. replace  fed       = 5 if fvoc == 3
+(1,575 real changes made)
+
+. label variable fed "father's education"
+
+. drop fschool fvoc
+
+. 
+. // mother
+. gen byte mschool = 1 if inlist(v18,1,2)
+(4,536 missing values generated)
+
+. replace  mschool = 2 if inlist(v18,3,6)
+(2,151 real changes made)
+
+. replace  mschool = 3 if inlist(v18,4,5) | v19 == 9
+(1,719 real changes made)
+
+. 
+. gen byte mvoc = 1 if inlist(v19, 1,50)
+(6,670 missing values generated)
+
+. replace  mvoc = 2 if inlist(v19, 5,6,9)
+(4,306 real changes made)
+
+. replace  mvoc = 3 if inlist(v19, 10,11)
+(968 real changes made)
+
+. 
+. gen byte med:ed_lb = 1 if inlist(mschool,1,2) & mvoc == 1
+(6,869 missing values generated)
+
+. replace  med       = 2 if mschool == 1 & mvoc == 2
+(1,992 real changes made)
+
+. replace  med       = 3 if mschool == 2 & mvoc == 2
+(1,461 real changes made)
+
+. replace  med       = 4 if mschool == 3 & mvoc <  3
+(801 real changes made)
+
+. replace  med       = 5 if mvoc == 3
+(968 real changes made)
+
+. label variable med "mother's education"
+
+. drop mschool mvoc
+
+. 
+. // highest educated parent
+. egen byte ped = rowmax(med fed)
+(1,186 missing values generated)
+
+. label values ped ed_lb
+
+. label variable ped "highest educated parent"
+
+. note ped: based on v16 v17 v18 v19 \ dummy_dta01.do \ MM TS
+
+. drop med fed
+
+. 
+. **# mobility
+. gen byte mobile:yesno_lb = ( ed != ped ) if !missing(ed,ped)
+(1,297 missing values generated)
+
+. label variable mobile "educationally mobile"
+
+. note mobile : based on ed ped \ dummy_dta01.do \ MM TS
+
+. 
+. **# clean up and save
+. keep id mobile
+
+. compress
+  (0 bytes saved)
+
+. note: dummy01.dta \ education variables \ dummy_dta01.do \ MM TS 
+
+. label data "education variables"
+
+. datasignature set, reset
+  8864:2(113931):1998119958:3693503463       (data signature set)
+
+. save dummy01.dta, replace
+file dummy01.dta saved
+
+. 
+. log close
+      name:  <unnamed>
+       log:  c:\mijn documenten\onderwijs\konstanz\stata\open_science\dummy\ana\dummy_dta01.txt
+  log type:  text
+ closed on:  26 Feb 2025, 17:47:05
+----------------------------------------------------------------------------------------------------

@@ -1,0 +1,144 @@
+----------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  c:\mijn documenten\onderwijs\konstanz\stata\open_science\dummy\ana\dummy_dta02.txt
+  log type:  text
+ opened on:  26 Feb 2025, 17:47:05
+
+. 
+. // non-education variables
+. // MM
+. 
+. version 18
+
+. clear all
+
+. macro drop _all
+
+. 
+. use ../data/dummy_v0-1-0
+(Dietry Unconventional Meals and Misguided Yummies (Dummy))
+
+. 
+. **# missing values
+. do dummy_missing.do
+
+. // prepare missing values
+. 
+. mvdecode *, mv(-99=.d \ -98=.e \ -97=.f \ -96=.n \ -95=.l \ -94=.m) 
+         V01: 37 missing values generated
+         V02: 47 missing values generated
+         V03: 190 missing values generated
+         V04: 135 missing values generated
+         V05: 135 missing values generated
+         V06: 135 missing values generated
+         V07: 135 missing values generated
+         V08: 135 missing values generated
+         V09: 135 missing values generated
+         V10: 135 missing values generated
+         V11: 135 missing values generated
+         V12: 135 missing values generated
+         V13: 135 missing values generated
+         V14: 135 missing values generated
+         V15: 135 missing values generated
+         V16: 1180 missing values generated
+         V17: 1378 missing values generated
+         V18: 958 missing values generated
+         V19: 1396 missing values generated
+         V20: 331 missing values generated
+         V21: 61 missing values generated
+         V22: 590 missing values generated
+         V23: 37 missing values generated
+
+. foreach lab in sex educ yesno_lb pvoc health_lb book_lb {
+  2.         label define `lab' .d "don't know" ///
+>                                        .e "refused" ///
+>                                        .f "filter"  ///
+>                                        .n "data error" ///
+>                                        .l "illegible" ///
+>                                        .m "multiple answers", modify
+  3. }
+
+. 
+end of do-file
+
+. 
+. rename *, lower
+
+. keep id v01 v02 v20 v23
+
+. 
+. **# demographics
+. rename v01 age
+
+. note age : based on V01 \ dummy_dta02.do \ MM TS
+
+. 
+. gen byte agecat:agecat_lb = floor(age/25)*25
+(37 missing values generated)
+
+. label variable agecat "age (categorized)"
+
+. label define agecat_lb 0  "18-24"  ///
+>                        25 "25-49"  ///
+>                                            50 "50-74"  ///
+>                                            75 ">75"
+
+. note agecat : based on V01 \ dummy_dta02.do \ MM TS                                        
+
+. 
+. gen byte female:female_lb = v02 - 1
+(47 missing values generated)
+
+. label define female_lb 0 "male" 1 "female"
+
+. label variable female "respondent's sex"
+
+. note female : base on V02 \ dummy_dta02.do \ MM TS
+
+. tab female v02, missing
+
+respondent |                    respondent's sex
+    's sex |      male     female  don't kno    refused  multiple  |     Total
+-----------+-------------------------------------------------------+----------
+      male |     4,329          0          0          0          0 |     4,329 
+    female |         0      4,488          0          0          0 |     4,488 
+         . |         0          0         30         15          2 |        47 
+-----------+-------------------------------------------------------+----------
+     Total |     4,329      4,488         30         15          2 |     8,864 
+
+. 
+. **# pineapple
+. rename v20 pineapple
+
+. note pineapple : based on v20 \ dummy_dta02.do \ MM TS
+
+. 
+. **# books
+. rename v23 books
+
+. note books : based on v23 \ dummy_dta02.do \ MM TS
+
+.                    
+. **# clean and save
+. drop v02 age 
+
+. compress
+  (0 bytes saved)
+
+. note: dummy02.dta \ non-education variables \ dummy_dta02.do \ MM TS 
+
+. label data "non-education variables"
+
+. datasignature set, reset
+  8864:5(60294):3476324688:2398080117       (data signature set)
+
+. save dummy02.dta, replace
+file dummy02.dta saved
+
+. 
+. log close
+      name:  <unnamed>
+       log:  c:\mijn documenten\onderwijs\konstanz\stata\open_science\dummy\ana\dummy_dta02.txt
+  log type:  text
+ closed on:  26 Feb 2025, 17:47:05
+----------------------------------------------------------------------------------------------------
