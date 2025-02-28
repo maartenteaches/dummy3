@@ -1,0 +1,648 @@
+----------------------------------------------------------------------------------------------------------------------
+      name:  <unnamed>
+       log:  d:\mijn documenten\onderwijs\konstanz\stata\open_science\dummy_3\ana\dummy.txt
+  log type:  text
+ opened on:  28 Feb 2025, 16:05:19
+
+. 
+. version 18
+
+. clear all
+
+. macro drop _all
+
+. use "d:\mijn documenten\onderwijs\konstanz\stata\open_science\dummy_3\data\dummy_v0-1-0.dta"
+(Dietry Unconventional Meals and Misguided Yummies (Dummy))
+
+. 
+. rename *, lower
+
+. 
+. **# missing values
+. mvdecode *, mv(-99=.d \ -98=.e \ -97=.f \ -96=.n \ -95=.l \ -94=.m) 
+         v01: 37 missing values generated
+         v02: 47 missing values generated
+         v03: 190 missing values generated
+         v04: 135 missing values generated
+         v05: 135 missing values generated
+         v06: 135 missing values generated
+         v07: 135 missing values generated
+         v08: 135 missing values generated
+         v09: 135 missing values generated
+         v10: 135 missing values generated
+         v11: 135 missing values generated
+         v12: 135 missing values generated
+         v13: 135 missing values generated
+         v14: 135 missing values generated
+         v15: 135 missing values generated
+         v16: 1180 missing values generated
+         v17: 1378 missing values generated
+         v18: 958 missing values generated
+         v19: 1396 missing values generated
+         v20: 331 missing values generated
+         v21: 61 missing values generated
+         v22: 590 missing values generated
+         v23: 37 missing values generated
+
+. foreach lab in sex educ yesno_lb pvoc health_lb book_lb {
+  2.         label define `lab' .d "don't know" ///
+>                                        .e "refused" ///
+>                                        .f "filter"  ///
+>                                        .n "data error" ///
+>                                        .l "illegible" ///
+>                                        .m "multiple answers", modify
+  3. }
+
+. 
+. **# respondent's education
+. gen byte school = 1 if inlist(v03,1,2)
+(7,105 missing values generated)
+
+. replace  school = 2 if inlist(v03,3,6)
+(2,628 real changes made)
+
+. replace  school = 3 if inlist(v03,4,5) | v11 == 1
+(4,692 real changes made)
+
+. 
+. gen byte voc = 1 if inlist(1, v04, v05, v08, v14, v15)
+(7,312 missing values generated)
+
+. replace  voc = 2 if inlist(1, v06, v07, v09, v10, v11)
+(5,390 real changes made)
+
+. replace  voc = 3 if inlist(1, v12, v13)
+(2,831 real changes made)
+
+. 
+. gen byte ed:ed_lb = 1 if inlist(school,1,2) & voc == 1
+(8,148 missing values generated)
+
+. replace  ed       = 2 if school == 1 & voc == 2
+(1,172 real changes made)
+
+. replace  ed       = 3 if school == 2 & voc == 2
+(1,897 real changes made)
+
+. replace  ed       = 4 if school == 3 & voc <  3
+(2,045 real changes made)
+
+. replace  ed       = 5 if voc == 3
+(2,831 real changes made)
+
+. label define ed_lb 1 "lower or middle secondary & no vocational"     ///
+>                    2 "lower secondary & vocational"                  ///
+>                    3 "middle secondary & vocational"                 ///
+>                    4 "higher secondary & with or without vocational" ///
+>                    5 "university"
+
+. label var ed "respondent's education"
+
+. note ed: based on v03-v15 \ dummy.do \ MM TS
+
+. 
+. **# parents' education
+. // father
+. gen byte fschool = 1 if inlist(v16,1,2)
+(4,761 missing values generated)
+
+. replace  fschool = 2 if inlist(v16,3,6)
+(1,637 real changes made)
+
+. replace  fschool = 3 if inlist(v16,4,5) | v17 == 9
+(2,849 real changes made)
+
+. 
+. gen byte fvoc = 1 if inlist(v17, 1,50)
+(7,629 missing values generated)
+
+. replace  fvoc = 2 if inlist(v17, 5,6,9)
+(4,676 real changes made)
+
+. replace  fvoc = 3 if inlist(v17, 10,11)
+(1,575 real changes made)
+
+. 
+. gen byte fed:ed_lb = 1 if inlist(fschool,1,2) & fvoc == 1
+(7,870 missing values generated)
+
+. replace  fed       = 2 if fschool == 1 & fvoc == 2
+(2,346 real changes made)
+
+. replace  fed       = 3 if fschool == 2 & fvoc == 2
+(907 real changes made)
+
+. replace  fed       = 4 if fschool == 3 & fvoc <  3
+(1,379 real changes made)
+
+. replace  fed       = 5 if fvoc == 3
+(1,575 real changes made)
+
+. label variable fed "father's education"
+
+. 
+. // mother
+. gen byte mschool = 1 if inlist(v18,1,2)
+(4,536 missing values generated)
+
+. replace  mschool = 2 if inlist(v18,3,6)
+(2,151 real changes made)
+
+. replace  mschool = 3 if inlist(v18,4,5) | v19 == 9
+(1,719 real changes made)
+
+. 
+. gen byte mvoc = 1 if inlist(v19, 1,50)
+(6,670 missing values generated)
+
+. replace  mvoc = 2 if inlist(v19, 5,6,9)
+(4,306 real changes made)
+
+. replace  mvoc = 3 if inlist(v19, 10,11)
+(968 real changes made)
+
+. 
+. gen byte med:ed_lb = 1 if inlist(mschool,1,2) & mvoc == 1
+(6,869 missing values generated)
+
+. replace  med       = 2 if mschool == 1 & mvoc == 2
+(1,992 real changes made)
+
+. replace  med       = 3 if mschool == 2 & mvoc == 2
+(1,461 real changes made)
+
+. replace  med       = 4 if mschool == 3 & mvoc <  3
+(801 real changes made)
+
+. replace  med       = 5 if mvoc == 3
+(968 real changes made)
+
+. label variable med "mother's education"
+
+. 
+. // highest educated parent
+. egen byte ped = rowmax(med fed)
+(1,186 missing values generated)
+
+. label values ped ed_lb
+
+. label variable ped "highest educated parent"
+
+. note ped: based on v16 v17 v18 v19 \ dummy.do \ MM TS
+
+. 
+. **# mobility
+. gen byte mobile:yesno_lb = ( ed != ped ) if !missing(ed,ped)
+(1,297 missing values generated)
+
+. label variable mobile "educationally mobile"
+
+. note mobile : based on ed ped \ dummy.do \ MM TS
+
+. 
+. **# demographics
+. rename v01 age
+
+. note age : based on V01 \ dummy.do \ MM TS
+
+. 
+. gen byte agecat:agecat_lb = floor(age/25)*25
+(37 missing values generated)
+
+. label variable agecat "age (categorized)"
+
+. label define agecat_lb 0  "18-24"  ///
+>                        25 "25-49"  ///
+>                                            50 "50-74"  ///
+>                                            75 ">75"
+
+. note agecat : based on V01 \ dummy.do \ MM TS                                      
+
+. 
+. gen byte female:female_lb = v02 - 1
+(47 missing values generated)
+
+. label define female_lb 0 "male" 1 "female"
+
+. label variable female "respondent's sex"
+
+. note female : base on V02 \ dummy.do \ MM TS
+
+. tab female v02, missing
+
+respondent |                    respondent's sex
+    's sex |      male     female  don't kno    refused  multiple  |     Total
+-----------+-------------------------------------------------------+----------
+      male |     4,329          0          0          0          0 |     4,329 
+    female |         0      4,488          0          0          0 |     4,488 
+         . |         0          0         30         15          2 |        47 
+-----------+-------------------------------------------------------+----------
+     Total |     4,329      4,488         30         15          2 |     8,864 
+
+. 
+. **# pineapple
+. rename v20 pineapple
+
+. note pineapple : based on v20 \ dummy.do \ MM TS
+
+. 
+. **# books
+. rename v23 books
+
+. note books : based on v23 \ dummy.do \ MM TS
+
+. 
+. **# health
+. rename v21 health
+
+. note health : based on v21 \ dummy.do \ MM TS
+
+. 
+. **# touse
+. gen byte touse:yesno_lb = !missing(mobile, age, pineapple, books, female)
+
+. label variable touse "observations without missing values"
+
+. 
+. **# descriptives
+. dtable i.pineapple i.mobile i.agecat i.female i.books if touse
+
+----------------------------------------------
+                                    Summary   
+----------------------------------------------
+N                                        7,353
+Is pineapple on pizza acceptable              
+  no                             4,125 (56.1%)
+  yes                            3,228 (43.9%)
+educationally mobile                          
+  no                             2,562 (34.8%)
+  yes                            4,791 (65.2%)
+age (categorized)                             
+  18-24                             494 (6.7%)
+  25-49                          2,706 (36.8%)
+  50-74                          3,372 (45.9%)
+  >75                              781 (10.6%)
+respondent's sex                              
+  male                           3,667 (49.9%)
+  female                         3,686 (50.1%)
+read books in spare time                      
+  daily                          1,569 (21.3%)
+  once a week                    1,379 (18.8%)
+  once a month                   1,019 (13.9%)
+  less often                     2,122 (28.9%)
+  never                          1,264 (17.2%)
+----------------------------------------------
+
+. collect style cell border_block[column-header corner], ///
+>       border(top, width(1pt) color("0 154 209")) 
+
+. collect style cell cell_type[column-header], halign(right) font(,bold)    
+
+. collect style cell var[5.books], ///
+>       border(bottom, width(1pt) color("0 154 209"))
+
+. collect style cell var[_N], ///
+>       border(top, width(1pt) color("0 154 209"))
+
+. collect style cell , font(arial)          
+
+. collect export "d:\mijn documenten\onderwijs\konstanz\stata\open_science\dummy_3\txt/tab1.docx", replace
+(collection DTable exported to file d:\mijn documenten\onderwijs\konstanz\stata\open_science\dummy_3\txt/tab1.docx)
+
+. 
+. **# missing values
+. frame create tograph
+
+. frame change tograph
+
+. frame default {
+.         local varl : variable label pineapple
+.         count if missing(pineapple)
+  331
+.         local n = r(N)
+. }
+
+. set obs 1
+Number of observations (_N) was 0, now 1.
+
+. gen var = `"`varl'"'
+
+. gen nmiss = `n'
+
+. local N = 1
+
+. 
+. foreach var in mobile agecat female books {
+  2.         frame default {
+  3.                 local varl : variable label `var'
+  4.                 count if missing(`var')
+  5.                 local n = r(N)
+  6.         }
+  7.         set obs `++N'
+  8.         replace var = `"`varl'"' in l
+  9.         replace nmiss = `n' in l
+ 10. }
+  1,297
+Number of observations (_N) was 1, now 2.
+(1 real change made)
+(1 real change made)
+  37
+Number of observations (_N) was 2, now 3.
+(1 real change made)
+(1 real change made)
+  47
+Number of observations (_N) was 3, now 4.
+(1 real change made)
+(1 real change made)
+  37
+Number of observations (_N) was 4, now 5.
+(1 real change made)
+(1 real change made)
+
+. frame default {
+.         count if missing(pineapple, mobile, agecat, female, books) 
+  1,511
+.         local n = r(N)
+. }
+
+. set obs `++N'
+Number of observations (_N) was 5, now 6.
+
+. replace var = "total" in l
+(1 real change made)
+
+. replace nmiss = `n' in l
+(1 real change made)
+
+. 
+. gen yaxis = _n
+
+. labmask yaxis , values(var)
+
+. 
+. twoway scatter nmiss yaxis,                         ///
+>     ylab(1/6, val nogrid) ytitle("")                ///
+>         recast(dropline) horizontal                     ///
+>         mlab(nmiss) mlabformat(%9.0gc) mlabcolor(black) ///
+>         xlab(none) xscale(range(0 1600))                ///
+>         xtitle("number of missing values")              
+
+. graph export "d:\mijn documenten\onderwijs\konstanz\stata\open_science\dummy_3\txt/gr_missing.emf", replace     
+file d:\mijn documenten\onderwijs\konstanz\stata\open_science\dummy_3\txt/gr_missing.emf saved as Enhanced Metafile
+    format
+
+. frame change default
+
+. 
+. **# bivariate relationship
+. // create empty file to append results to
+. preserve
+
+. drop _all
+
+. gen labels = ""
+
+. save "d:\mijn documenten\onderwijs\konstanz\stata\open_science\dummy_3\ana\temp.dta", replace
+(dataset contains 0 observations)
+file d:\mijn documenten\onderwijs\konstanz\stata\open_science\dummy_3\ana\temp.dta saved
+
+. restore
+
+. 
+. // fill file with proportions of pineapple by x
+. foreach var of varlist books female agecat mobile {
+  2.         preserve 
+  3.         
+.         // get the proportions
+.         collapse (mean) pineapple if touse, by(`var')
+  4. 
+.         // add an empty row with the variable label on top
+.         set obs `= _N + 1'
+  5.         replace `var' = -1 in l
+  6.         label define `:value label `var''  ///
+>            -1 `"{bf:`:variable label `var''}"', modify
+  7.         sort `var'
+  8.         
+.         // make a string variable from the variable
+.         decode `var', gen(labels)
+  9.         drop `var'
+ 10.         
+.         // add those rows to `tofill'
+.         append using "d:\mijn documenten\onderwijs\konstanz\stata\open_science\dummy_3\ana\temp.dta"
+ 11.         save "d:\mijn documenten\onderwijs\konstanz\stata\open_science\dummy_3\ana\temp.dta", replace
+ 12.         restore
+ 13. }
+Number of observations (_N) was 5, now 6.
+(1 real change made)
+file d:\mijn documenten\onderwijs\konstanz\stata\open_science\dummy_3\ana\temp.dta saved
+Number of observations (_N) was 2, now 3.
+(1 real change made)
+(variable labels was str21, now str29 to accommodate using data's values)
+file d:\mijn documenten\onderwijs\konstanz\stata\open_science\dummy_3\ana\temp.dta saved
+Number of observations (_N) was 4, now 5.
+(1 real change made)
+(variable labels was str22, now str29 to accommodate using data's values)
+file d:\mijn documenten\onderwijs\konstanz\stata\open_science\dummy_3\ana\temp.dta saved
+Number of observations (_N) was 2, now 3.
+(1 real change made)
+(variable labels was str25, now str29 to accommodate using data's values)
+file d:\mijn documenten\onderwijs\konstanz\stata\open_science\dummy_3\ana\temp.dta saved
+
+. 
+. preserve
+
+. use "d:\mijn documenten\onderwijs\konstanz\stata\open_science\dummy_3\ana\temp.dta", clear
+(Dietry Unconventional Meals and Misguided Yummies (Dummy))
+
+. 
+. // add some blank space between the variables
+. seqvar yaxis = 1/3 5/9 11/13 15/20
+
+. labmask yaxis, values(labels)
+
+. 
+. // turn proportions into percentages
+. replace pineapple = pineapple * 100
+(13 real changes made)
+
+. 
+. // make the graph
+. twoway scatter pineapple yaxis ,             ///
+>     recast(dropline) horizontal              ///
+>         ylabel(1/3 5/9 11/13 15/20, val noticks) ///
+>         xlabel(none)                             ///
+>         yscale(reverse) xscale(range(0 60))      ///
+>     mlabel(pineapple) mlabformat(%9.0f)      ///
+>         lcolor("0 154 209") mcolor("0 154 209")  ///
+>         xtitle("% who find pineapple on pizza acceptable")
+
+. graph export "d:\mijn documenten\onderwijs\konstanz\stata\open_science\dummy_3\txt/gr01.emf", replace
+file d:\mijn documenten\onderwijs\konstanz\stata\open_science\dummy_3\txt/gr01.emf saved as Enhanced Metafile format
+
+. restore 
+
+. 
+. **# multivariate analysis
+. // age linear
+. logit pineapple i.mobile age i.female i.books, or
+
+Iteration 0:  Log likelihood = -5041.8617  
+Iteration 1:  Log likelihood =  -4897.868  
+Iteration 2:  Log likelihood =  -4897.759  
+Iteration 3:  Log likelihood =  -4897.759  
+
+Logistic regression                                     Number of obs =  7,353
+                                                        LR chi2(7)    = 288.21
+                                                        Prob > chi2   = 0.0000
+Log likelihood = -4897.759                              Pseudo R2     = 0.0286
+
+-------------------------------------------------------------------------------
+    pineapple | Odds ratio   Std. err.      z    P>|z|     [95% conf. interval]
+--------------+----------------------------------------------------------------
+       mobile |
+         yes  |    .484565   .0242642   -14.47   0.000     .4392672     .534534
+          age |   .9958781    .001356    -3.03   0.002      .993224    .9985393
+              |
+       female |
+      female  |   .7553445   .0372342    -5.69   0.000     .6857814    .8319638
+              |
+        books |
+ once a week  |   1.020049   .0778764     0.26   0.795     .8782846    1.184695
+once a month  |   .7803853   .0654106    -2.96   0.003     .6621596    .9197195
+  less often  |   .7052061   .0494021    -4.99   0.000      .614733    .8089945
+       never  |   .6997614   .0557842    -4.48   0.000       .59854    .8181007
+              |
+        _cons |   2.152209   .2247119     7.34   0.000     1.753923    2.640939
+-------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+
+. 
+. coefplot, eform drop(_cons) xline(1) baselevels   ///
+>      headings(0.mobile = "{bf:mobile}"            ///
+>                   agecat   = "{bf:age}"               ///
+>                           0.female = "{bf:respondent's sex}"  ///
+>                           1.books  = "{bf:Read books}")       ///
+>          xtitle("{bf:Odds Ratio}")                    ///
+>          mcolor("0 154 209") ciopts(lcolor("0 154 209"))
+
+. graph export "d:\mijn documenten\onderwijs\konstanz\stata\open_science\dummy_3/txt/gr02a.emf", replace
+file d:\mijn documenten\onderwijs\konstanz\stata\open_science\dummy_3/txt/gr02a.emf saved as Enhanced Metafile
+    format
+
+. 
+. // age categorized
+. logit pineapple i.mobile i.agecat i.female i.books, or
+
+Iteration 0:  Log likelihood = -5041.8617  
+Iteration 1:  Log likelihood = -4867.9351  
+Iteration 2:  Log likelihood = -4867.7154  
+Iteration 3:  Log likelihood = -4867.7154  
+
+Logistic regression                                     Number of obs =  7,353
+                                                        LR chi2(9)    = 348.29
+                                                        Prob > chi2   = 0.0000
+Log likelihood = -4867.7154                             Pseudo R2     = 0.0345
+
+-------------------------------------------------------------------------------
+    pineapple | Odds ratio   Std. err.      z    P>|z|     [95% conf. interval]
+--------------+----------------------------------------------------------------
+       mobile |
+         yes  |   .4869127    .024569   -14.26   0.000     .4410629    .5375288
+              |
+       agecat |
+       25-49  |   .7348001   .0736543    -3.07   0.002     .6037361    .8943165
+       50-74  |   .5517442   .0547387    -5.99   0.000     .4542446    .6701712
+         >75  |   .8966482   .1057641    -0.92   0.355     .7115716    1.129862
+              |
+       female |
+      female  |   .7484648   .0370644    -5.85   0.000     .6792339     .824752
+              |
+        books |
+ once a week  |   1.011047   .0773969     0.14   0.886     .8701838    1.174714
+once a month  |    .766669   .0644267    -3.16   0.002     .6502457    .9039372
+  less often  |   .6989496   .0491402    -5.09   0.000     .6089778     .802214
+       never  |   .6896695   .0551711    -4.64   0.000     .5895871    .8067409
+              |
+        _cons |   2.609027   .3079988     8.12   0.000     2.070109    3.288243
+-------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+
+. 
+. coefplot, eform drop(_cons) xline(1) baselevels   ///
+>      headings(0.mobile = "{bf:mobile}"            ///
+>                   0.agecat = "{bf:age (categorized)}" ///
+>                           0.female = "{bf:respondent's sex}"  ///
+>                           1.books  = "{bf:Read books}")       ///
+>          xtitle("{bf:Odds Ratio}")                    ///
+>          mcolor("0 154 209") ciopts(lcolor("0 154 209"))
+
+. graph export "d:\mijn documenten\onderwijs\konstanz\stata\open_science\dummy_3/txt/gr02.emf", replace
+file d:\mijn documenten\onderwijs\konstanz\stata\open_science\dummy_3/txt/gr02.emf saved as Enhanced Metafile format
+
+. 
+. 
+. // added health
+. logit pineapple i.mobile i.agecat i.female i.books i.health, or
+
+Iteration 0:  Log likelihood = -5032.7955  
+Iteration 1:  Log likelihood =  -4837.955  
+Iteration 2:  Log likelihood = -4837.4786  
+Iteration 3:  Log likelihood = -4837.4785  
+
+Logistic regression                                     Number of obs =  7,342
+                                                        LR chi2(13)   = 390.63
+                                                        Prob > chi2   = 0.0000
+Log likelihood = -4837.4785                             Pseudo R2     = 0.0388
+
+-------------------------------------------------------------------------------
+    pineapple | Odds ratio   Std. err.      z    P>|z|     [95% conf. interval]
+--------------+----------------------------------------------------------------
+       mobile |
+         yes  |   .4911716   .0248845   -14.03   0.000     .4447423     .542448
+              |
+       agecat |
+       25-49  |   .7537852   .0758832    -2.81   0.005     .6188103    .9182007
+       50-74  |   .6024342   .0609327    -5.01   0.000     .4941009      .73452
+         >75  |   1.061425   .1295429     0.49   0.625     .8356097    1.348265
+              |
+       female |
+      female  |   .7571762   .0376994    -5.59   0.000     .6867775    .8347912
+              |
+        books |
+ once a week  |   .9868003   .0758754    -0.17   0.863     .8487505    1.147304
+once a month  |   .7685549   .0647842    -3.12   0.002     .6515146    .9066207
+  less often  |   .7082103   .0500427    -4.88   0.000     .6166172    .8134087
+       never  |   .7163006   .0577106    -4.14   0.000     .6116684    .8388313
+              |
+       health |
+        good  |   .9145403   .0621644    -1.31   0.189     .8004676    1.044869
+satisfactory  |    .736895   .0563546    -3.99   0.000     .6343215    .8560554
+        poor  |   .7210616   .0704194    -3.35   0.001     .5954473    .8731751
+         bad  |   .4386145   .0718382    -5.03   0.000     .3181774    .6046396
+              |
+        _cons |    2.84415   .3535397     8.41   0.000     2.229177    3.628778
+-------------------------------------------------------------------------------
+Note: _cons estimates baseline odds.
+
+. 
+. coefplot, eform drop(_cons) xline(1) baselevels    ///
+>      headings(0.mobile = "{bf:mobile}"             ///
+>                   0.agecat = "{bf:age (categorized)}"  ///
+>                           0.female = "{bf:respondent's sex}"   ///
+>                           1.books  = "{bf:Read books}"         ///
+>                           1.health = "{bf:subjective health}") ///
+>          xtitle("{bf:Odds Ratio}")                     ///
+>          mcolor("0 154 209") ciopts(lcolor("0 154 209"))
+
+. graph export "d:\mijn documenten\onderwijs\konstanz\stata\open_science\dummy_3/txt/gr02b.emf", replace
+file d:\mijn documenten\onderwijs\konstanz\stata\open_science\dummy_3/txt/gr02b.emf saved as Enhanced Metafile
+    format
+
+. 
+. 
+. log close
+      name:  <unnamed>
+       log:  d:\mijn documenten\onderwijs\konstanz\stata\open_science\dummy_3\ana\dummy.txt
+  log type:  text
+ closed on:  28 Feb 2025, 16:05:29
+----------------------------------------------------------------------------------------------------------------------
