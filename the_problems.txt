@@ -1,0 +1,6 @@
+using all absolue paths makes it harder to get this code to run
+
+putting all code in one file, makes it harder to figure out what happens where
+
+by adding additional models and graphs it is harder to figure out what code is 
+relevant for the replication and what is not relevant
