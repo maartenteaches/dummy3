@@ -180,7 +180,7 @@ twoway scatter nmiss yaxis,                         ///
 	xlab(none) xscale(range(0 1600))                ///
 	xtitle("number of missing values")              
 graph export "d:\mijn documenten\onderwijs\konstanz\stata\open_science\dummy_3\txt/gr_missing.emf", replace	
-
+frame change default
 
 **# bivariate relationship
 // create empty file to append results to
